@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シンプルなタブ切り替え</title>
+    <style type="text/css">
+    .tab-container {
+    width: 500px; /* タブコンテナの幅 */
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    }
+
+    .tab-buttons {
+        display: flex;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .tab-button {
+        padding: 10px 20px;
+        border: none;
+        background: #eee;
+        cursor: pointer;
+        flex-grow: 1;
+        text-align: center;
+    }
+
+    .tab-button.active {
+        background: #fff;
+        border-bottom: 2px solid blue; /* アクティブなタブを目立たせる */
+    }
+
+    .tab-contents {
+        padding: 20px;
+    }
+
+    .tab-content {
+        display: none; /* 最初はすべてのコンテンツを非表示 */
+    }
+
+    .tab-content.active {
+        display: block; /* アクティブなコンテンツのみ表示 */
+    }
+    </style>
+
+</head>
+<body>
+    <div class="tab-container">
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="tab1">タブ1</button>
+            <button class="tab-button" data-tab="tab2">タブ2</button>
+            <button class="tab-button" data-tab="tab3">タブ3</button>
+        </div>
+        <div class="tab-contents">
+            <div id="tab1" class="tab-content active">
+                <h2>タブ1の内容</h2>
+                <p>タブ1の内容がここに表示されます。</p>
+            </div>
+            <div id="tab2" class="tab-content">
+                <h2>タブ2の内容</h2>
+                <p>タブ2の内容がここに表示されます。</p>
+            </div>
+            <div id="tab3" class="tab-content">
+                <h2>タブ3の内容</h2>
+                <p>タブ3の内容がここに表示されます。</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+    
+        // タブがクリックされた時の処理
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // すべてのタブとコンテンツからアクティブクラスを削除
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+    
+                // クリックされたタブと対応するコンテンツにアクティブクラスを追加
+                const tabId = button.dataset.tab;
+                const targetContent = document.getElementById(tabId);
+                button.classList.add('active');
+                targetContent.classList.add('active');
+            });
+        });
+    
+        // 最初のタブをアクティブにする (初期表示)
+        tabButtons[0].classList.add('active');
+        tabContents[0].classList.add('active');
+        </script>
+</body>
+</html>

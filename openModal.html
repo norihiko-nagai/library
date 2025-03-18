@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>モーダルウィンドウ</title>
+    <style>
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+        .fade-in.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <button id="openModal">開く</button>
+
+    <div id="modal" style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);">
+        <div style="background: white; padding: 20px; margin: 100px auto; width: 300px; text-align: center;">
+            <p>モーダルの内容</p>
+            <button id="closeModal">閉じる</button>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById("openModal").addEventListener("click", () => {
+            document.getElementById("modal").style.display = "block";
+        });
+    
+        document.getElementById("closeModal").addEventListener("click", () => {
+            document.getElementById("modal").style.display = "none";
+        });
+    </script>
+    </body>
+</html>

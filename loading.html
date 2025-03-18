@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ローディング画面</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ローディング画面 */
+        .loadwindow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        /* ローディングバーの枠 */
+        .loadingbar-container {
+            width: 80%;
+            max-width: 400px;
+            height: 1px;
+            background: #444;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        /* ローディングバー（進行状況に応じて変化） */
+        .loadingbar {
+            width: 0%;
+            height: 100%;
+            background: #00ff00;
+            transition: width 0.1s linear;
+        }
+
+        /* メインコンテンツ（初期状態は非表示） */
+        .content {
+            display: none;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ローディング画面 -->
+    <div class="loadwindow">
+        <div>Loading...</div>
+        <div class="loadingbar-container">
+            <div class="loadingbar"></div>
+        </div>
+        <div id="loadingText">0%</div>
+    </div>
+
+    <!-- メインコンテンツ -->
+    <div class="content">
+        <h1>ページが読み込まれました！</h1>
+        <p>これはサンプルのコンテンツです。</p>
+        <img src="https://cdn.esahubble.org/archives/images/publicationjpg/heic2007a.jpg" width="600">
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const loadingBar = document.querySelector(".loadingbar");
+            const loadingText = document.getElementById("loadingText");
+            const loadWindow = document.querySelector(".loadwindow");
+            const content = document.querySelector(".content");
+            const images = document.querySelectorAll('img'); // 画像を取得
+    
+            let progress = 0;
+            let totalImages = images.length;
+            let loadedImages = 0;
+    
+            // 画像の読み込み進捗に基づいて進捗バーを更新
+            function updateProgress() {
+                if (totalImages === 0) return; // 画像がなければ進捍しない
+                progress = (loadedImages / totalImages) * 100; // 読み込んだ画像の割合で進捗を計算
+                loadingBar.style.width = progress + "%";
+                loadingText.textContent = Math.floor(progress) + "%";
+    
+                // すべての画像が読み込まれたらローディング画面を消す
+                if (loadedImages === totalImages) {
+                    finishLoading();
+                }
+            }
+    
+            // 画像の読み込みを監視
+            images.forEach(img => {
+                // 画像がすでに読み込まれていればすぐに進捗更新
+                if (img.complete) {
+                    loadedImages++;
+                    updateProgress(); // 進捗を更新
+                } else {
+                    // 画像が読み込まれた時に進捗を更新
+                    img.onload = function() {
+                        loadedImages++;
+                        updateProgress(); // 進捗を更新
+                    };
+                    // 画像の読み込みに失敗した時の処理（進捗を更新）
+                    img.onerror = function() {
+                        loadedImages++;
+                        updateProgress(); // 進捗を更新
+                    };
+                }
+            });
+    
+            // ローディング完了後、コンテンツを表示
+            function finishLoading() {
+                setTimeout(() => {  // ローディング画面を少し待機してから非表示に
+                    loadWindow.style.display = "none"; // ローディング画面を非表示
+                    content.style.display = "block"; // メインコンテンツを表示
+                }, 500);  // ユーザーが進捗バーが100%になったのを視覚的に確認できる時間
+            }
+    
+            updateProgress(); // 最初の進捗更新
+        });
+    </script>
+</body>
+</html>

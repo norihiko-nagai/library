@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スクロールで画像が表示される</title>
+    <style>
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+        .fade-in.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div style="padding:200em 0">サンプルテキスト</div>
+    <img src="images/photo-01.jpg" class="fade-in" alt="画像">
+    <div style="padding:30em 0">サンプルテキスト</div>
+
+    <!-- /bodyの直前に書く↓ -->
+    <script>
+        const fadeElements = document.querySelectorAll(".fade-in");
+    
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("show");
+                }
+            });
+        }, { threshold: 0.3 });
+    
+        fadeElements.forEach(el => observer.observe(el));
+    </script>
+    </body>
+</html>
