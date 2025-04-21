@@ -1,0 +1,28 @@
+// カスタム投稿タイプ「lp」の一覧に「スラッグ」列を追加
+function add_slug_column_to_lp($columns) {
+    $columns['slug'] = 'スラッグ';
+    return $columns;
+}
+
+function show_slug_column_in_lp($column, $post_id) {
+    if ($column === 'slug') {
+        $post = get_post($post_id);
+        echo esc_html($post->post_name);
+    }
+}
+
+add_filter('manage_lp_posts_columns', 'add_slug_column_to_lp');
+add_action('manage_lp_posts_custom_column', 'show_slug_column_in_lp', 10, 2);
+
+// カスタム投稿タイプ「lp」の管理画面でスラッグでも検索できるようにする
+function add_slug_search_support_for_lp($query) {
+    global $pagenow;
+
+    if (is_admin() && $pagenow == 'edit.php' && isset($_GET['post_type']) && $_GET['post_type'] === 'lp' && isset($_GET['s']) && $query->is_main_query()) {
+        $search_term = sanitize_text_field($_GET['s']);
+
+        // post_name__in は正確には「配列内のpost_nameに完全一致」でマッチする
+        $query->set('post_name__in', array($search_term));
+    }
+}
+add_action('pre_get_posts', 'add_slug_search_support_for_lp');
