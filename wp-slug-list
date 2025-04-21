@@ -1,0 +1,35 @@
+// 固定ページ一覧に「スラッグ」列を追加
+function add_slug_column_to_pages($columns) {
+    $columns['slug'] = 'スラッグ';
+    return $columns;
+}
+
+// 各ページにスラッグを表示
+function show_slug_column_content($column_name, $post_id) {
+    if ($column_name === 'slug') {
+        $post = get_post($post_id);
+        echo esc_html($post->post_name);
+    }
+}
+
+add_filter('manage_pages_columns', 'add_slug_column_to_pages');
+add_action('manage_pages_custom_column', 'show_slug_column_content', 10, 2);
+
+// 固定ページ一覧の検索にスラッグを含める
+function include_slug_in_page_search($query) {
+    global $pagenow;
+
+    if (is_admin() && $pagenow == 'edit.php' && isset($_GET['post_type']) && $_GET['post_type'] === 'page' && isset($_GET['s']) && $query->is_main_query()) {
+        $search_term = $_GET['s'];
+        $query->set('meta_query', array(
+            'relation' => 'OR',
+            array(
+                'key'     => '_wp_page_template',
+                'value'   => $search_term,
+                'compare' => 'LIKE'
+            )
+        ));
+        $query->set('post_name__in', array($search_term)); // スラッグでも検索できるように
+    }
+}
+add_action('pre_get_posts', 'include_slug_in_page_search');
