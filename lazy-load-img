@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>画像の遅延読み込み</title>
+  <style>
+    img {
+      display: block;
+      width: 100%;
+      max-width: 600px;
+      margin: 50px auto;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    img.loaded {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 遅延読み込みする画像 -->
+  <img data-src="example1.jpg" alt="画像1" />
+  <img data-src="example2.jpg" alt="画像2" />
+  <img data-src="example3.jpg" alt="画像3" />
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const images = document.querySelectorAll('img[data-src]');
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              img.src = img.dataset.src;
+              img.onload = () => {
+                img.classList.add('loaded');
+              };
+              observer.unobserve(img);
+            }
+          });
+        });
+
+        images.forEach(img => {
+          observer.observe(img);
+        });
+      } else {
+        // フォールバック：IntersectionObserver未対応ブラウザ
+        images.forEach(img => {
+          img.src = img.dataset.src;
+          img.onload = () => {
+            img.classList.add('loaded');
+          };
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
