@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>サイトのタイトル - サイトのキャッチコピー</title>
+
+    <!-- メタ情報 -->
+    <meta name="description" content="サイトの簡単な説明をここに記述（検索結果に表示される）">
+    <meta name="keywords" content="キーワード1, キーワード2, キーワード3">
+    <meta name="robots" content="index, follow"> <!-- 検索エンジンにインデックスさせる -->
+    <link rel="canonical" href="https://www.example.com/"> <!-- 正規URL -->
+
+    <!-- OGP（Open Graph Protocol）設定 -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="サイトのタイトル">
+    <meta property="og:description" content="SNSでシェアされたときに表示される説明文">
+    <meta property="og:url" content="https://www.example.com/">
+    <meta property="og:image" content="https://www.example.com/ogp-image.jpg">
+    <meta property="og:site_name" content="サイトの名前">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitterカード設定 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="サイトのタイトル">
+    <meta name="twitter:description" content="Twitterでシェアされたときに表示される説明文">
+    <meta name="twitter:image" content="https://www.example.com/twitter-image.jpg">
+    <meta name="twitter:site" content="@Twitterアカウント">
+
+    <!-- 構造化データ（JSON-LD: 検索エンジン向けの情報） -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "サイトの名前",
+        "url": "https://www.example.com/",
+        "description": "サイトの説明",
+        "image": "https://www.example.com/thumbnail.jpg"
+    }
+    </script>
+
+    <!-- Favicon（ファビコン） -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+    <!-- CSS -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1em;
+            text-align: center;
+        }
+        main {
+            padding: 2em;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1em;
+            margin-top: 2em;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>サイトのタイトル</h1>
+</header>
+
+<main>
+    <style>
+        .image-container {
+          width: 430px;
+          height: 230px;
+          overflow: hidden;
+          position: relative;
+          border: 1px solid #ccc;
+        }
+        
+        .image-wrapper {
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          position: relative;
+        }
+        
+        .image-wrapper.zoomed {
+          overflow: auto;
+        }
+        
+        .image-wrapper img {
+          width: 100%;
+          height: auto;
+          transition: width 0.3s ease;
+          display: block;
+        }
+        
+        .image-wrapper.zoomed img {
+          width: 200%; /* ← 拡大倍率に応じて調整可能 */
+        }
+        
+        .zoom-button {
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          background: rgba(0, 0, 0, 0.6);
+          color: white;
+          border: none;
+          padding: 6px 10px;
+          font-size: 16px;
+          cursor: pointer;
+          border-radius: 4px;
+          z-index: 10;
+        }
+        </style>
+        
+        <div class="image-container">
+          <button class="zoom-button" onclick="toggleZoom()">＋</button>
+          <div class="image-wrapper" id="imageWrapper">
+            <img id="zoomImage" src="images/photo-01.jpg" alt="グラフ">
+          </div>
+        </div>
+        
+        <script>
+        let zoomed = false;
+        const wrapper = document.getElementById("imageWrapper");
+        const button = document.querySelector(".zoom-button");
+        
+        function toggleZoom() {
+          zoomed = !zoomed;
+          wrapper.classList.toggle("zoomed", zoomed);
+          button.textContent = zoomed ? "－" : "＋";
+        }
+        </script>
+</main>
+
+<footer>
+    <p>&copy; 2025 サイトの名前</p>
+</footer>
+
+</body>
+</html>
