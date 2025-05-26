@@ -1,0 +1,78 @@
+手順概要
+
+STEP 1：GTMでgclidを取得し、保存
+
+✅ タグマネージャーで以下の2つを設定
+
+⸻
+
+1. 変数：「URLパラメータからgclidを取得」
+	•	GTM画面 → [変数] → [新規]
+	•	変数タイプ：URL
+	•	コンポーネントの種類：クエリ
+	•	クエリキー：gclid
+	•	変数名例：URL - gclid
+
+⸻
+
+2. カスタムHTMLタグ：gclidをCookieに保存
+	•	GTM → [タグ] → [新規]
+	•	タグタイプ：カスタムHTML
+	•	以下のコードを貼り付け：
+
+<script>
+  (function() {
+    function getParam(name) {
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name);
+    }
+    const gclid = getParam('gclid');
+    if (gclid) {
+      const now = new Date();
+      now.setTime(now.getTime() + 90*24*60*60*1000); // 90日保持
+      document.cookie = "gclid=" + gclid + "; path=/; expires=" + now.toUTCString();
+    }
+  })();
+</script>
+
+トリガー：全ページ（Page View）
+
+🔸 この処理で、gclidがCookieに保存されます（90日間有効）
+
+⸻
+
+STEP 2：保存したgclidをGA4イベントに送信
+
+✅ 新しいユーザー定義変数：Cookieからgclidを取得
+	•	[変数] → [新規]
+	•	変数タイプ：ファーストパーティCookie
+	•	Cookie名：gclid
+	•	変数名例：Cookie - gclid
+
+⸻
+
+✅ 送信イベントにgclidを追加
+	•	GA4へ送るイベントタグ（例：purchase、form_submitなど）を開く
+	•	[ユーザー定義パラメータ] に以下を追加：
+パラメータ名
+値
+gclid
+{{Cookie - gclid}}
+
+STEP 3：GA4でカスタムディメンションを登録
+	1.	GA4管理画面 → [カスタム定義] → [カスタムディメンションを作成]
+  2.	設定内容：
+項目 内容
+名前 gclid
+スコープ イベント
+パラメータ名 gclid（GTMと同じ名前）
+
+3.	保存後、数時間～1日で探索レポートなどで使用可能になります
+
+⸻
+
+✅ これでできること
+	•	gclid付きでコンバージョンしたユーザーの動向をGA4で分析
+	•	gclid別の成果分析が可能（広告単位の最適化に貢献）
+	•	必要に応じてこのデータをCSVとして抽出 → Google広告にインポート
+
