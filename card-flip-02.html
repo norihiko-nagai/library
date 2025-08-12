@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カードを回転させる</title>
+    <style>
+    .card {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 3 / 2; /* 横縦比を一定に保つ */
+  perspective: 1000px;
+  cursor: pointer;
+  margin: auto;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1); /* 滑らかな動き */
+  transform-style: preserve-3d;
+}
+
+.card.is-flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.card-front {
+  background: #fff;
+}
+
+.card-front img {
+  width: 100%;
+  height: 70%;
+  object-fit: cover;
+}
+
+.card-front h3 {
+  margin: 0;
+  padding: 8px;
+  font-size: clamp(1rem, 2.5vw, 1.3rem); /* 画面サイズに応じて変化 */
+}
+
+.card-back {
+  background: linear-gradient(135deg, #f8f8f8, #ececec);
+  transform: rotateY(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  text-align: center;
+  box-sizing: border-box;
+}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="card-inner">
+    <div class="card-front">
+      <img src="sample.jpg" alt="サンプル画像">
+      <h3>タイトル</h3>
+    </div>
+    <div class="card-back">
+      <p>ここに説明文が入ります。クリックすると表に戻ります。</p>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-inner">
+    <div class="card-front">
+      <img src="sample.jpg" alt="サンプル画像">
+      <h3>タイトル</h3>
+    </div>
+    <div class="card-back">
+      <p>ここに説明文が入ります。クリックすると表に戻ります。</p>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-inner">
+    <div class="card-front">
+      <img src="sample.jpg" alt="サンプル画像">
+      <h3>タイトル</h3>
+    </div>
+    <div class="card-back">
+      <p>ここに説明文が入ります。クリックすると表に戻ります。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const cards = document.querySelectorAll('.card');
+
+cards.forEach(card => {
+  card.addEventListener('click', () => {
+    // クリックされたカード以外は表に戻す
+    cards.forEach(c => {
+      if (c !== card) {
+        c.classList.remove('is-flipped');
+      }
+    });
+
+    // クリックされたカードの裏表をトグル
+    card.classList.toggle('is-flipped');
+  });
+});
+</script>
+</body>
+</html>
